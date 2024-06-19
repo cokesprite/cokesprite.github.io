@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="dist/index.js"></script>
+    <script>
+      window.__inst_config__ = {
+        projectName: 'zl_app_test',
+      };
+    </script>
+    <script src="dist/TalkingData-2.0.0.js"></script>
+    <script src="dist/xlog_config.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .source-error-img {
+        width: 40%;
+      }
+
+      .btn-wrap > button {
+        margin-left: 24px;
+        margin-right: 36px;
+        margin-bottom: 20px;
+      }
+
+      .blank-box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <div class="content-wrap">
+        <img
+          class="source-error-img"
+          src="https://img2.baidu.com/it/u=861863691,2776527252&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500"
+        />
+      </div>
+
+      <div class="blank-box"></div>
+
+      <div class="btn-wrap">
+        <button class="source-error">
+          点击触发sourceError（加载图片），造成白屏
+        </button>
+        <button class="source-error-noblankscreen">
+          点击触发sourceError（加载图片），不会白屏
+        </button>
+        <button class="source-error-js-load">
+          点击触发sourceError(加载JS报错)，出现白屏
+        </button>
+        <button class="source-error-js-load-noblankscreen">
+          点击触发sourceError(加载JS报错)，不会出现白屏
+        </button>
+        <button class="action-fetchError">
+          action请求(fetchError)，造成白屏
+        </button>
+        <button class="action-fetchError-noblankscreen">
+          action请求(fetchError)，不会出现白屏
+        </button>
+        <button class="action-reqxml">action请求(reqxml)，造成白屏</button>
+        <button class="action-reqxml-noblankscreen">
+          action请求(reqxml)不会出现白屏
+        </button>
+        <button class="unhandled-rejection">
+          点击触发unhandledRejection，造成白屏
+        </button>
+        <button class="unhandled-rejection-noblankscreen">
+          点击触发unhandledRejection，不会白屏
+        </button>
+        <button class="window-error">点击触发windowError，造成白屏</button>
+        <button class="window-error-blank">
+          点击触发windowError，95%为白色像素
+        </button>
+        <button class="window-error-noblankscreen">
+          点击触发windowError，不会白屏
+        </button>
+        <button class="component-error">
+          点击触发componentError，造成白屏
+        </button>
+        <button class="component-error-noblankscreen">
+          点击触发componentError，不会白屏
+        </button>
+        <button class="observable-error">
+          点击触发observableError，造成白屏
+        </button>
+        <button class="observable-error-noblankscreen">
+          点击触发observableError，不会白屏
+        </button>
+        <button class="window-error-all-blank">
+          点击触发触发白屏检测，全黑
+        </button>
+        <button class="window-error-all-grey">
+          点击触发触发白屏检测，全灰
+        </button>
+        <button class="error-log">h5 error日志</button>
+        <button class="warning-log">h5 warning日志</button>
+        <button class="info-log">h5 info日志</button>
+        <button class="debug-log">h5 debug日志</button>
+        <button class="verbose-log">h5 verbose日志</button>
+      </div>
+    </div>
+    <script></script>
+    <script>
+      const btnWrap = document.querySelector('.btn-wrap');
+      const contentWrap = document.querySelector('.content-wrap');
+
+      function handleClear() {
+        btnWrap.innerHTML = '';
+        contentWrap.removeChild(document.querySelector('.source-error-img'));
+      }
+
+      /**
+       * action请求-fetchError报错
+       */
+      const actionFetchError = document.querySelector('.action-fetchError');
+      const actionFetchErrorNoblankscreen = document.querySelector(
+        '.action-fetchError-noblankscreen'
+      );
+
+      function handleFetchError(isBlankScreen) {
+        if (isBlankScreen) {
+          handleClear();
+        }
+
+        window.xlog.log({
+          id: 'develop_custom',
+          page_id: 'network',
+          page_title: '',
+          btn_id: 'fetchError',
+          btn_title: {
+            subtype: 'subtype',
+            url: 'apiPath',
+            api: 'api',
+            errorMessage: 'errorMessage',
+            status: 200,
+            traceId: '123456789',
+            params: 'params',
+            response: 'response',
+            timestamp: 1651137756818,
+          },
+        });
+      }
+
+      actionFetchError.addEventListener('click', () => handleFetchError(true));
+      actionFetchErrorNoblankscreen.addEventListener('click', () =>
+        handleFetchError()
+      );
+
+      /**
+       * action请求-reqxml报错
+       */
+      const actionReqxml = document.querySelector('.action-reqxml');
+      const actionReqxmlNoblankscreen = document.querySelector(
+        '.action-reqxml-noblankscreen'
+      );
+
+      function handleReqxmlError(isBlankScreen) {
+        if (isBlankScreen) {
+          handleClear();
+        }
+
+        window.xlog.log({
+          id: 'develop_custom',
+          page_id: 'network',
+          page_title: '',
+          btn_id: 'reqxml',
+          btn_title: {
+            subtype: 'fail',
+            url: 'apiPath',
+            api: 'api',
+            errorMessage: 'errorMessage',
+            status: 200,
+            traceId: '123456789',
+            params: 'params',
+            response: 'response',
+            timestamp: 1651137756818,
+          },
+        });
+      }
+
+      actionReqxml.addEventListener('click', () => handleReqxmlError(true));
+      actionReqxmlNoblankscreen.addEventListener('click', () =>
+        handleReqxmlError()
+      );
+
+      /**
+       * sourceError报错
+       */
+      const sourceErrorBtn = document.querySelector('.source-error');
+      const sourceErrorNoBtn = document.querySelector(
+        '.source-error-noblankscreen'
+      );
+      const sourceErrorJsLoad = document.querySelector('.source-error-js-load');
+      const sourceErrorJsLoadNoblankscreen = document.querySelector(
+        '.source-error-js-load-noblankscreen'
+      );
+
+      function handleSourceError(isBlankScreen) {
+        if (isBlankScreen) {
+          handleClear();
+        }
+        const imgs = Array.from(document.querySelectorAll('.source-error-img'));
+        imgs.forEach((img) => {
+          img.setAttribute('width', '1px');
+          img.setAttribute('height', '1px');
+          img.setAttribute(
+            'src',
+            'https://img2.baidu2.com/it/u=861863691,2776527252&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'
+          );
+        });
+      }
+
+      function handleSourceErrorLoadJs(isBlankScreen) {
+        if (isBlankScreen) {
+          handleClear();
+        }
+        const script = document.createElement('script');
+        script.setAttribute('src', 'http://wwaaw.sstestsssssssss.com/home.js');
+        contentWrap.appendChild(script);
+      }
+
+      sourceErrorBtn.addEventListener('click', () => handleSourceError(true));
+      sourceErrorNoBtn.addEventListener('click', () => handleSourceError());
+
+      sourceErrorJsLoad.addEventListener('click', () =>
+        handleSourceErrorLoadJs(true)
+      );
+      sourceErrorJsLoadNoblankscreen.addEventListener('click', () =>
+        handleSourceErrorLoadJs()
+      );
+
+      /**
+       * unhandledRejection报错
+       */
+      const unhandledRejectionBtn = document.querySelector(
+        '.unhandled-rejection'
+      );
+      const unhandledRejectionNoBtn = document.querySelector(
+        '.unhandled-rejection-noblankscreen'
+      );
+
+      function handleUnhandledRejection(isBlankScreen) {
+        if (isBlankScreen) {
+          handleClear();
+        }
+        Promise.reject('wgs');
+      }
+      unhandledRejectionBtn.addEventListener('click', () =>
+        handleUnhandledRejection(true)
+      );
+      unhandledRejectionNoBtn.addEventListener('click', () =>
+        handleUnhandledRejection()
+      );
+
+      /**
+       * windowError报错
+       */
+      const windowErrorBtn = document.querySelector('.window-error');
+      const windowErrorNoBtn = document.querySelector(
+        '.window-error-noblankscreen'
+      );
+      function handleWindowError(isBlankScreen) {
+        if (isBlankScreen) {
+          handleClear();
+        }
+
+        console.log(wgs.age);
+      }
+      windowErrorBtn.addEventListener('click', () => handleWindowError(true));
+      windowErrorNoBtn.addEventListener('click', () => handleWindowError());
+
+      /**
+       * windowError，95%
+       */
+      const windowErrorBlankBtn = document.querySelector('.window-error-blank');
+      const blankBox = document.querySelector('.blank-box');
+      function handleWindowErrorBlank() {
+        handleClear();
+
+        const clientWidth = document.body.clientWidth;
+        const clientHeight = document.body.clientHeight;
+        const percentFiveVal = clientWidth * clientHeight * 0.05; // 5%面积时黑色
+        const floorSqrt = Math.floor(Math.sqrt(percentFiveVal)); // 白屏时黑块的宽高
+
+        blankBox.setAttribute(
+          'style',
+          `width: ${floorSqrt}px; height: ${floorSqrt}px; background-color: black`
+        );
+        console.log(clientWidth * clientHeight);
+        console.log(percentFiveVal);
+        console.log(floorSqrt);
+
+        console.log(wgs.age);
+      }
+      windowErrorBlankBtn.addEventListener('click', handleWindowErrorBlank);
+
+      /**
+       * windowError，全黑
+       */
+      const windowErrorFullBlankBtn = document.querySelector(
+        '.window-error-all-blank'
+      );
+      function handleWindowErrorFullBlankBtn() {
+        handleClear();
+
+        document.body.setAttribute('style', `background-color: rgb(0, 0, 0)`);
+        console.log(wgs.age);
+      }
+      windowErrorFullBlankBtn.addEventListener(
+        'click',
+        handleWindowErrorFullBlankBtn
+      );
+
+      /**
+       * windowError，全灰
+       */
+      const windowErrorFullGreyBtn = document.querySelector(
+        '.window-error-all-grey'
+      );
+      function handleWindowErrorFullGreyBtn() {
+        handleClear();
+
+        document.body.setAttribute(
+          'style',
+          `background-color: rgb(128, 128, 128)`
+        );
+        console.log(wgs.age);
+      }
+      windowErrorFullGreyBtn.addEventListener(
+        'click',
+        handleWindowErrorFullGreyBtn
+      );
+
+      /**
+       * componentError报错
+       */
+      const componentErrorBtn = document.querySelector('.component-error');
+      const componentErrorNoBtn = document.querySelector(
+        '.component-error-noblankscreen'
+      );
+
+      function handleComponentError(isBlankScreen) {
+        if (isBlankScreen) {
+          handleClear();
+        }
+
+        window.xlog.componentErrorLog({
+          errorMessage: 'errorMessage',
+          errorStack: 'errorStack',
+        });
+      }
+      componentErrorBtn.addEventListener('click', () =>
+        handleComponentError(true)
+      );
+      componentErrorNoBtn.addEventListener('click', () =>
+        handleComponentError()
+      );
+
+      /**
+       * observableError报错
+       */
+      const observableErrorBtn = document.querySelector('.observable-error');
+      const observableErrorNoBtn = document.querySelector(
+        '.observable-error-noblankscreen'
+      );
+
+      function handleObservableError(isBlankScreen) {
+        if (isBlankScreen) {
+          handleClear();
+        }
+
+        window.xlog.log({
+          id: 'develop_custom',
+          page_id: 'error',
+          page_title: '',
+          btn_id: 'observableError',
+          btn_title: {
+            content: {
+              errorMessage: 'Uncaught ReferenceError: b is not defined',
+              errorStack:
+                'ReferenceError: b is not defined\n    at http://localhost:10001/:209:18',
+              pagePath: 'http://localhost:10001/',
+            },
+            timestamp: 1651137756818,
+          },
+        });
+      }
+      observableErrorBtn.addEventListener('click', () =>
+        handleObservableError(true)
+      );
+      observableErrorNoBtn.addEventListener('click', () =>
+        handleObservableError()
+      );
+
+      /* 打日志给原生 */
+      function onConsoleLog(data) {
+        if (window.MyWebView) {
+          // Android
+          window.MyWebView.callHTNativeMethod &&
+            window.MyWebView.callHTNativeMethod(JSON.stringify(data));
+        } else if (window.HTJSBridge) {
+          // 老的iOS
+          window.HTJSBridge.invoke(
+            'callHTNativeMethod',
+            data,
+            window.gotContainerParams
+          );
+        } else if (window.callHTNativeMethod) {
+          // iOS
+          window.callHTNativeMethod(data);
+        }
+      }
+
+      function buildH5Log(level) {
+        return {
+          nativeMethodName: 'onConsoleLog',
+          content: `h5打的${level}日志`,
+          level,
+        };
+      }
+
+      // error日志
+      const errorLogBtn = document.querySelector('.error-log');
+      errorLogBtn.addEventListener('click', () => {
+        const log = buildH5Log('error');
+        onConsoleLog(log);
+      });
+
+      // warning日志
+      const warningLogBtn = document.querySelector('.warning-log');
+      warningLogBtn.addEventListener('click', () => {
+        const log = buildH5Log('warning');
+        onConsoleLog(log);
+      });
+
+      // info日志
+      const infoLogBtn = document.querySelector('.info-log');
+      infoLogBtn.addEventListener('click', () => {
+        const log = buildH5Log('info');
+        onConsoleLog(log);
+      });
+
+      // debug日志
+      const debugLogBtn = document.querySelector('.debug-log');
+      debugLogBtn.addEventListener('click', () => {
+        const log = buildH5Log('debug');
+        onConsoleLog(log);
+      });
+
+      // verbose日志
+      const verboseLogBtn = document.querySelector('.verbose-log');
+      verboseLogBtn.addEventListener('click', () => {
+        const log = buildH5Log('verbose');
+        onConsoleLog(log);
+      });
+    </script>
+  </body>
+</html>
+
